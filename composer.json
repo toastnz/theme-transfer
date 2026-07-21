@@ -1,0 +1,30 @@
+{
+  "name": "toastnz/theme-transfer",
+  "description": "Copy a Silverstripe site's theme setup - colours, fonts, layout settings - between servers as JSON",
+  "type": "silverstripe-vendormodule",
+  "keywords": [
+    "silverstripe",
+    "theme",
+    "colours",
+    "fonts",
+    "modular"
+  ],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Priscilla Yap",
+      "homepage": "http://toast.co.nz/",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=8.3",
+    "silverstripe/framework": "^6",
+    "silverstripe/siteconfig": "^6",
+    "toastnz/colourpalettes": "^6.0",
+    "toastnz/theme-fonts": "^6"
+  },
+  "extra": {
+    "resources-dir": "_resources"
+  }
+}

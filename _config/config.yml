@@ -1,0 +1,21 @@
+---
+Name: theme-transfer
+After:
+  - toastnz-colourpalettes
+  - toastnz-theme-fonts
+---
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - Toast\ThemeTransfer\Extensions\SiteConfigThemeTransferExtension
+
+# The module ships with no sources configured. Each project points it at its own
+# SiteConfig theme extension and any colour-bearing relations - see the readme.
+#
+# Deliberately NOT set here: Colour.theme_colours. Which colours count as theme
+# colours is a per-project decision, and a module-level default would silently
+# reclassify colours on every site that installs this.
+Toast\ThemeTransfer\Services\ThemeTransferService:
+  setting_sources: []
+  general_fields: []
+  exclude_fields: []
+  colour_relations: {}
