@@ -420,8 +420,14 @@ class ThemeTransferService
             $isNew ? $summary['created'][] = "Colour: {$label}"
                    : $summary['updated'][] = "Colour: {$label}";
 
+            // Key by CSSName and by Title, since colourRef() falls back to
+            // Title for colours with no CSSName. CSSName keys win - a Title key
+            // must never displace one.
             if ($cssName) {
                 $map[strtolower($cssName)] = $colour;
+            }
+            if ($title && !isset($map[strtolower($title)])) {
+                $map[strtolower($title)] = $colour;
             }
         }
 
@@ -451,7 +457,9 @@ class ThemeTransferService
                 continue;
             }
 
-            $reference = $map[strtolower($refCssName)] ?? $this->findColour($siteConfig, $refCssName, null);
+            // A theme colour points at a palette entry, never at another theme
+            // colour - that would chain inheritance.
+            $reference = $this->resolveColourRef($siteConfig, $refCssName, $map, false);
             if (!$reference) {
                 $summary['skipped'][] = "Theme colour '{$slotCssName}': reference '{$refCssName}' not found";
                 continue;
@@ -486,7 +494,7 @@ class ThemeTransferService
                 continue;
             }
 
-            $colour = $colourMap[strtolower($cssName)] ?? $this->findColour($siteConfig, $cssName, null);
+            $colour = $this->resolveColourRef($siteConfig, $cssName, $colourMap);
             if (!$colour) {
                 $summary['skipped'][] = "Slot {$slot}: colour '{$cssName}' not found";
                 continue;
@@ -706,8 +714,7 @@ class ThemeTransferService
                         continue;
                     }
 
-                    $colour = $colourMap[strtolower($cssName)]
-                        ?? $this->findColour($siteConfig, $cssName, null);
+                    $colour = $this->resolveColourRef($siteConfig, $cssName, $colourMap);
 
                     if (!$colour) {
                         $summary['warnings'][] = "{$relation} '{$match}': colour '{$cssName}' not found.";
@@ -733,6 +740,40 @@ class ThemeTransferService
     /* ------------------------------------------------------------------
      * Helpers
      * ---------------------------------------------------------------- */
+
+    /**
+     * Resolve a single exported colour reference back to a Colour.
+     *
+     * A reference is whatever colourRef() emitted - a CSSName, or a Title when
+     * the colour has no CSSName - so both are tried against the same string.
+     *
+     * Theme colours are valid targets for slots and colour relations (a button
+     * pointing at `primary` is the normal setup), so they are included by
+     * default. Only palette matching excludes them, to stop a palette entry
+     * colliding with a same-named theme colour.
+     */
+    protected function resolveColourRef(
+        SiteConfig $siteConfig,
+        ?string $ref,
+        array $map,
+        bool $allowThemeColours = true
+    ): ?Colour {
+        if (!$ref) {
+            return null;
+        }
+
+        if (isset($map[strtolower($ref)])) {
+            return $map[strtolower($ref)];
+        }
+
+        $colours = $siteConfig->Colours();
+        if (!$allowThemeColours) {
+            $colours = $colours->filter('IsThemeColour', 0);
+        }
+
+        return $colours->filter('CSSName:nocase', $ref)->first()
+            ?: $colours->filter('Title:nocase', $ref)->first();
+    }
 
     /**
      * Find a palette colour on this SiteConfig by CSSName, then Title. Theme
