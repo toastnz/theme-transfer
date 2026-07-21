@@ -2,6 +2,7 @@
 
 namespace Toast\ThemeTransfer\Extensions;
 
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
@@ -46,8 +47,7 @@ class SiteConfigThemeTransferExtension extends Extension
     {
         $owner = $this->owner;
 
-        $tab = $owner->config()->get('theme_transfer_cms_tab')
-            ?: self::config()->get('cms_tab');
+        $tab = Config::inst()->get(static::class, 'cms_tab');
 
         // Fall back to a top-level tab if the configured parent does not exist.
         $parent = substr($tab, 0, strrpos($tab, '.'));

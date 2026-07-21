@@ -181,13 +181,14 @@ class ThemeTransferService
 
         foreach ($siteConfig->Colours() as $colour) {
             if ($colour->IsThemeColour) {
-                $reference = $colour->ReferenceColour();
+                // Use colourRef() so a referenced colour with no CSSName falls
+                // back to its Title - importColours() matches on Title too, so
+                // the assignment still round-trips. Reading CSSName directly
+                // silently dropped the reference for such colours.
                 $themeColours[] = [
                     'cssName' => $colour->CSSName,
                     'title' => $colour->Title,
-                    'referenceCssName' => ($reference && $reference->exists())
-                        ? $reference->CSSName
-                        : null,
+                    'referenceCssName' => $this->colourRef($colour->ReferenceColour()),
                 ];
                 continue;
             }
