@@ -61,10 +61,9 @@ class SiteConfigThemeTransferExtension extends Extension
             HeaderField::create('ThemeTransferExportHeader', 'Export')->setHeadingLevel(2),
 
             TextareaField::create('ThemeTransferExport', 'Export (copy this)', $this->exportJson())
-                ->setRows(12)
                 ->setAttribute('readonly', 'readonly')
-                ->setAttribute('data-language', 'json')
                 ->setAttribute('spellcheck', 'false')
+                ->setRows(12)
                 ->setDescription(
                     'Theme settings, colours, fonts and buttons for this site. '
                     . 'Select all and copy, then paste into the target site.'
@@ -80,7 +79,6 @@ class SiteConfigThemeTransferExtension extends Extension
 
             TextareaField::create('ThemeTransferPaste', 'Import (paste here)')
                 ->setRows(12)
-                ->setAttribute('data-language', 'json')
                 ->setAttribute('spellcheck', 'false')
                 ->setDescription(
                     'Paste an export from another site and save to apply it. '
@@ -98,7 +96,6 @@ class SiteConfigThemeTransferExtension extends Extension
                 $tab,
                 TextareaField::create('ThemeTransferLog', 'Last import result')
                     ->setRows(10)
-                    ->setAttribute('data-language', 'json')
                     ->setAttribute('spellcheck', 'false')
                     ->setAttribute('readonly', 'readonly')
             );
