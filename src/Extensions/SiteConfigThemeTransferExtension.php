@@ -8,6 +8,7 @@ use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
+use SilverStripe\View\Requirements;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextareaField;
 use Toast\ThemeTransfer\Services\ThemeTransferService;
@@ -46,6 +47,9 @@ class SiteConfigThemeTransferExtension extends Extension
 
     public function updateCMSFields(FieldList $fields)
     {
+        Requirements::css('toastnz/theme-transfer: client/dist/styles/main.css');
+        Requirements::javascript('toastnz/theme-transfer: client/dist/scripts/main.js');
+
         $owner = $this->owner;
 
         $tab = Config::inst()->get(static::class, 'cms_tab');

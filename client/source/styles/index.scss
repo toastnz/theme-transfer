@@ -1,0 +1,69 @@
+#Root_Customization_set_Transfer {
+  .theme-transfer-actions {
+    &:has(>button) {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      display: flex !important;
+      gap: 20px;
+    }
+
+    &__button {
+      flex: 1;
+      border: 0;
+      border-radius: 5px;
+      padding: 10px;
+      font-weight: bold;
+
+      color: var(--cms-text-colour);
+      background-color: var(--cms-border-colour);
+
+      &.active {
+        color: var(--cms-accent-text-colour);
+        background-color: var(--cms-accent-colour);
+      }
+    }
+  }
+
+  &.import-mode {
+    .theme-transfer-export {
+      display: none !important;
+    }
+  }
+
+  &.export-mode {
+
+    .theme-transfer-message,
+    #Form_EditForm_ThemeTransferPaste_Holder,
+    #Form_EditForm_ThemeTransferDryRun_Holder,
+    #Form_EditForm_ThemeTransferLog_Holder {
+      display: none !important;
+    }
+  }
+
+  .theme-transfer-copy {
+    border: 0;
+    border-radius: 5px;
+    padding: 5px 20px;
+    font-weight: bold;
+    min-width: 90px;
+
+    color: var(--cms-accent-text-colour);
+    background-color: var(--cms-accent-colour);
+  }
+
+  .theme-transfer-export {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    display: flex !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    align-items: flex-start;
+    gap: 20px;
+
+    #Form_EditForm_ThemeTransferExport_Holder {
+      flex: 1;
+    }
+  }
+}
