@@ -5,6 +5,7 @@ namespace Toast\ThemeTransfer\Extensions;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\LiteralField;
@@ -58,24 +59,30 @@ class SiteConfigThemeTransferExtension extends Extension
         $fields->findOrMakeTab($tab, 'Theme Transfer');
 
         $fields->addFieldsToTab($tab, [
-            HeaderField::create('ThemeTransferExportHeader', 'Export')->setHeadingLevel(2),
+            HeaderField::create('ThemeTransferExportHeader', 'Theme Transfer')->setHeadingLevel(2),
 
-            TextareaField::create('ThemeTransferExport', 'Export (copy this)', $this->exportJson())
-                ->setAttribute('readonly', 'readonly')
-                ->setAttribute('spellcheck', 'false')
-                ->setRows(12)
-                ->setDescription(
-                    'Theme settings, colours, fonts and buttons for this site. '
-                    . 'Select all and copy, then paste into the target site.'
-                ),
-
-            HeaderField::create('ThemeTransferImportHeader', 'Import')->setHeadingLevel(2),
+            FieldGroup::create(
+                LiteralField::create('ThemeImportButton', '<button id="ThemeTransferImportButton" type="button" class="theme-transfer-actions__button active">Import</button>'),
+                LiteralField::create('ThemeExportButton', '<button id="ThemeTransferExportButton" type="button" class="theme-transfer-actions__button">Export</button>'),
+            )->addExtraClass('theme-transfer-actions'),
 
             LiteralField::create(
                 'ThemeTransferWarning',
-                '<p class="message warning">Importing overwrites theme settings, colours, fonts and '
+                '<p class="theme-transfer-message message notice">Importing a theme config will overwrite your current theme settings, colours, fonts and '
                 . 'buttons on this site. Uploaded assets (logos, images, font files) are not transferred.</p>'
             ),
+
+            FieldGroup::create(
+                TextareaField::create('ThemeTransferExport', 'Export (copy this)', $this->exportJson())
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('spellcheck', 'false')
+                    ->setRows(12)
+                    ->setDescription(
+                        'Theme settings, colours, fonts and buttons for this site. '
+                        . 'Select all and copy, then paste into the target site.'
+                    ),
+                LiteralField::create('ThemeExportCopyButton', '<button id="ThemeExportCopyButton" type="button" class="theme-transfer-copy">Copy</button>'),
+            )->addExtraClass('theme-transfer-export'),
 
             TextareaField::create('ThemeTransferPaste', 'Import (paste here)')
                 ->setRows(12)
@@ -85,9 +92,9 @@ class SiteConfigThemeTransferExtension extends Extension
                     . 'The field is cleared once the import runs.'
                 ),
 
-            CheckboxField::create('ThemeTransferDryRun', 'Preview only (do not write changes)')
+            CheckboxField::create('ThemeTransferDryRun', 'Validate only (do not write changes)')
                 ->setDescription(
-                    'Leave ticked to see what the import would do. Untick and save again to apply it.'
+                    'This will validate the import code without writing changes. Uncheck to write changes and import the theme.'
                 ),
         ]);
 
