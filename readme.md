@@ -4,12 +4,17 @@ Copy a site's theme setup — colours, fonts, layout and typography settings —
 
 Adds a **Theme Transfer** tab to Site Config with an export box to copy from and a paste box to import into. No routes, no public endpoints, no files written to `public/`.
 
+> **This module is built for the Marmalade theme, developed by [Toast](http://toast.co.nz/).** It is not a general-purpose Silverstripe module. It reads and writes the colour and font structures that Marmalade and its supporting modules define, so it only works on a site running the Marmalade theme together with the required modules listed below. On any other theme there is nothing for it to transfer.
+
 ## Requirements
 
 - PHP 8.3+
 - Silverstripe 6
+- The **Marmalade** theme
 - `toastnz/colourpalettes` ^6.0
 - `toastnz/theme-fonts` ^6
+
+All of these are required — the module has no fallback behaviour if the colour or font modules are absent, and the theme is what supplies the `SiteConfig` theme extension that `setting_sources` points at.
 
 Both module versions must match across the two sites you are transferring between. The payload carries a version number and the import warns on a mismatch, but an older site will not understand a newer payload.
 
