@@ -25,6 +25,9 @@
     "toastnz/theme-fonts": "^6"
   },
   "extra": {
-    "resources-dir": "_resources"
+    "resources-dir": "_resources",
+    "expose": [
+        "client"
+    ]
   }
 }
